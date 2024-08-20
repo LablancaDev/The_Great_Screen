@@ -1,0 +1,242 @@
+## GUÍA DEL PROYECTO THE GREAT SCREEN ##
+
+1. Creación del proyecto React con vite:  npm create vite@latest
+
+2. Instalación de dependencias en React:  npm install Bootstrap
+
+    import 'bootstrap/dist/css/bootstrap.min.css'; //import de bootstrap en main.jsx
+    import 'bootstrap/dist/js/bootstrap.bundle.min.js'; //import Script de Bootstrap en main.jsx
+
+3. Creación de algún componente como el NavBar y el contenido de la página principal como el listado general
+    de películas para ir teniendo un diseño base
+
+4. Instalación de React Router Dom para establecer las rutas y enlaces entre componentes: 
+    npm install react-router-dom 
+
+        Abre main.js o el archivo principal donde renderizas tu aplicación.
+        - Importa BrowserRouter y envuelve tu componente App con él:
+
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+
+    -Importa Routes y Route de react-router-dom. en tu nueva carpeta Routes y empieza a crear tus enlaces y rutas:
+
+   return (
+    
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/destinos" element={<Destinos />} />
+      <Route path="/cruceros" element={<Cruceros />} />
+      <Route path="/vuelos" element={<Vuelos />} />
+      <Route path="/misviajes" element={isAuthenticated ? <MisViajes /> : <Navigate to="/login" />} />
+      <Route path="/meteorologia" element={<Weather />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/destino/:nombre" element={<DestinoDetails />} /> /*Enrutamiento al componente DestinoDetails
+      <Route path="/crucero/:nombre" element={<DestinoDetailsCrucero />} />
+      <Route path="/vuelos/:id" element={<DestinoDetailsVuelo />} />
+
+    </Routes>
+  );
+
+   - Creación de los Links:
+
+  <Link to={"/vuelos"}>
+    <button className='btn btn-primary '>Volver</button>
+  </Link>
+
+  - Añadir <Router /> ojo pueden aparecer dos Router, el de react-router-dom o el de la carpeta (intentar cambiar el nombre)
+    El que hay que añadir es el de la carpeta con las rutas para que el enrutamiento funcione
+
+  function App() {
+
+  return (
+    <>
+      <NavBar />   IMPORTANTE EN EL COMPONENTE PRINCIPAL SOLO DEBE RENDERIZARSE EN NAVBAR POR EJEMPLO, EL RESTO DE COMPONENTES SE RENDERIZARÁN MEDIANTE LAS RUTAS
+      <Router />
+    </>
+  )
+}
+
+export default App
+
+
+5. Creación de la página del Login, una vez tenemos ya algún componente y página, se puede emprezar a establecer
+    rutas entre componentes: npm install react-router-dom
+
+6. Creamos el contexto para que junto con el Provider podamos acceder a los diferentes useState, useReducer y funciones especificadas en el provider
+   utilizaré desde cualquier lugar Context, context sólo almacena, para almacenar utilizaremos el Provider
+   -carpeta contexto
+        Context.jsx
+        Provider.jsx
+        miReducer.jsx
+
+   *Englobar el componente principal dentro del Provider
+    Englobar tu componente principal dentro de un Provider es esencial para que todos los componentes de tu aplicación puedan acceder al 
+    estado global y a las funciones asociadas que defines en el contexto/Provider.    
+
+    
+
+7. Creación de los useState y useReducer, estados de los componentes, en este caso primero creo un useReducer que controlará el estado del login
+    si algún usuario está registrado o no, los usuarios y contraseñas
+
+8. Una vez finalizado el login,el siguiente paso sería configurar el backend para manejar las solicitudes de datos y conectar tu aplicación frontend 
+    con la API de TMDB. Aquí te dejo una guía de pasos para configurar tu backend con Node.js y Express y cómo integrarlo con tu frontend en React:
+
+    1.Inicializar el Proyecto de Node.js, Instalar Node.js y Dependencias
+       
+        Crea una carpeta para tu backend y navega a ella desde la línea de comandos: /backend
+           
+    2.Configurar el archivo package.json para Express:  
+            -Dentro de la carpeta server, crea un archivo package.json
+                    npm init -y     crea el archivo package.json que contendrá las dependencias necesarias
+                -añadir dependencias y scripts:
+                    npm install express cors axios turso
+
+                        *express para el framework del servidor.
+                        *cors para permitir solicitudes entre tu frontend y backend.
+                        *axios para hacer solicitudes HTTP a la API de TMDB desde tu servidor.
+                        *turso para alojar la base de datos
+                -Instalar las dependencias
+                    npm install
+                    npm init- y
+    
+    3.Crea la estructura del proyecto, por ejemplo:
+        /backend
+            /controllers
+                moviesController.js
+            /routes
+                moviesRoutes.js
+            /models
+                userModel.js
+            app.js
+            .env
+            package.json
+
+    4.Configuración del Servidor Express
+
+    5.Crear el Controlador de Películas
+        Crear el Archivo controllers/moviesController.js:
+        Aquí manejarás las solicitudes a la API de TMDB y a tu base de datos
+
+    6.Crear el Archivo routes/moviesRoutes.js:
+    Define las rutas para tus endpoints    
+
+    7.configurar la Base de Datos en Turso
+    Conectar con Turso:
+    Instala y configura el cliente de Turso 
+
+    8.Integrar el Frontend y el Backend
+    Consumir la API desde el Frontend:
+    Utiliza axios en React para hacer solicitudes a tu backend:
+
+    9.Reiniciar y Levantar el servidor:
+        Uso de Nodemon
+            Nodemon es una herramienta para el desarrollo en Node.js que reinicia automáticamente tu servidor cuando detecta cambios en los archivos del proyecto. 
+            Para usarlo, instala nodemon como una dependencia de desarrollo con npm install nodemon --save-dev. En tu archivo package.json, define un script como "dev": "nodemon server.js". 
+            Ejecuta el comando npm run dev para iniciar el servidor con nodemon. Esto facilita el desarrollo al evitar reinicios manuales tras cada cambio en el código.
+
+    * Abre tu terminal y navega a la carpeta backend:
+        - Asegúrate de que todas las dependencias estén instaladas ejecutando:  npm install
+        - Inicia el servidor utilizando el script definido en package.json: npm run dev
+        - Si no estás usando nodemon y solo tienes el script "start": npm start
+            # Esto ejecutará tu servidor, y nodemon reiniciará automáticamente el servidor en caso de que detecte cambios en los archivos del proyecto.
+
+    10.Configuración de Turso : npm install @libsql/client dotenv
+
+        -1. Instalación de @libsql/client:
+            Funcionalidad: Este paquete permite interactuar con bases de datos LibSQL, facilitando la ejecución de consultas y el manejo de datos. Es esencial si 
+                tu aplicación necesita conectar y operar con una base de datos LibSQL (anteriormente conocida como Turso).
+            Uso: Permite crear conexiones a la base de datos y ejecutar operaciones como consultas y transacciones.
+
+        -2. Intala Dotenv:
+            Funcionalidad: Este paquete carga variables de entorno desde un archivo .env en el proyecto. Esto es útil para almacenar y gestionar secretos y configuraciones 
+                sensibles como claves de API y credenciales de bases de datos de manera segura.
+            Uso: Facilita el acceso a variables de entorno en tu código sin tener que codificarlas directamente en tu aplicación.
+
+        Acceder a Turso y crear una base de datos (se puede crear desde la web o la terminal)
+            -Abrir la terminar WSL  (pinguino)    
+            -Verifica tu Conexión a la Base de Datos: turso db show uncommon-thing
+            -Inicia el Shell Interactivo de SQL     
+
+        Resumen:
+        -Frontend (React): Crea la interfaz de usuario y consume los endpoints de tu backend.
+        -Backend (Node.js y Express): Configura el servidor, maneja las solicitudes a la API de TMDB, y crea endpoints para tu aplicación.
+        -API Externa (TMDB): Utiliza TMDB para obtener información sobre películas.
+        -Base de Datos (Turso): Almacena datos de usuarios u otros datos necesarios para tu aplicación.
+
+9. Creación de los archivos de las carpetas models y controllers...
+
+10. Construcción del archivo models/userModels.js que interactua con la base de datos Turso
+    (luego, una vez que los datos estén en Turso, podrás implementar la API interna para realizar operaciones CRUD)
+
+    
+
+
+
+
+    ## FLUJO DE EJECUCIÓN COMPLETO DE SOLICITUD DE DATOS ##
+
+    En el flujo descrito, el frontend realiza la consulta a tu servidor, y no directamente a la API externa (TMDb). Vamos a detallar cómo funciona esto:
+
+### **1. Flujo de Solicitud de Datos:**
+
+1. **Solicitud del Frontend al Servidor**:
+   - El componente React (`MoviesPage`) hace una solicitud GET a tu servidor en `http://localhost:5000/api/movies/popular` para obtener las películas populares.
+
+2. **Manejo de la Solicitud en el Servidor**:
+   - Tu servidor Express recibe la solicitud en el endpoint `/api/movies/popular` a través de `moviesRoutes`.
+   - `moviesRoutes` delega la solicitud al controlador `moviesController`.
+
+3. **Solicitud de Datos a la API Externa**:
+   - En el controlador (`moviesController`), se realiza una solicitud GET a la API externa de TMDb (`https://api.themoviedb.org/3/movie/popular`) para obtener los datos de las películas populares.
+   - Esta solicitud es realizada usando `axios` y la clave de API almacenada en las variables de entorno.
+
+4. **Procesamiento y Respuesta**:
+   - Una vez que se obtienen los datos de TMDb, el controlador procesa la respuesta y envía los datos de vuelta al frontend.
+   - El servidor responde al frontend con los datos de las películas en formato JSON.
+
+5. **Renderizado en el Frontend**:
+   - El componente React recibe los datos y los muestra en la interfaz de usuario.
+
+### **Beneficios de Este Enfoque:**
+
+1. **Seguridad**:
+   - La clave de API de TMDb está oculta en el backend y no se expone al frontend. Esto evita el riesgo de que la clave de API sea comprometida.
+
+2. **Control de Datos**:
+   - Puedes procesar, filtrar, o modificar los datos en el servidor antes de enviarlos al frontend. Esto es útil si necesitas hacer algún tipo de transformación o agregar lógica adicional.
+
+3. **Simplificación del Frontend**:
+   - El frontend solo necesita interactuar con tu servidor en lugar de manejar directamente múltiples API. Esto puede simplificar la lógica y el manejo de errores en el frontend.
+
+4. **Caching y Optimización**:
+   - Puedes implementar caching en el servidor para almacenar temporalmente los resultados de las solicitudes a TMDb y reducir la carga en la API externa, mejorando así el rendimiento y reduciendo costos.
+
+### **Ejemplo de Flujo Completo:**
+
+1. **Frontend**:
+   - El componente `MoviesPage` realiza una solicitud a `http://localhost:5000/api/movies/popular`.
+
+2. **Backend**:
+   - El servidor Express recibe la solicitud en `/api/movies/popular`.
+   - `moviesRoutes` dirige la solicitud al controlador `getPopularMovies`.
+
+3. **Controlador**:
+   - `getPopularMovies` realiza una solicitud a la API de TMDb para obtener los datos de películas populares.
+   - Los datos se reciben, procesan y se envían de vuelta al cliente.
+
+4. **Frontend**:
+   - Los datos de las películas se reciben y se muestran en el componente `MoviesPage`.
+
+### **Resumen:**
+
+Sí, es correcto. El frontend hace la solicitud a tu servidor, que actúa como intermediario. Tu servidor es responsable de obtener los datos de la API externa, procesarlos si es necesario, y luego enviar esos datos al frontend. Este enfoque ayuda a proteger tus claves de API y proporciona un control adicional sobre el manejo de datos.
+
+
+
+
+
+
+

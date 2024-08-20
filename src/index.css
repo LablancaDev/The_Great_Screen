@@ -1,0 +1,67 @@
+body {
+    background-image: url(../src/assets/imgs/xmen.jpg);
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-attachment: fixed; 
+}
+
+/* NavBar */
+.navbar{
+   
+    background: linear-gradient(orange, rgb(255, 233, 137), rgb(255, 134, 21));
+    z-index: 100;
+}
+.logo{
+    width: 50px;
+}
+.containers{
+    margin-top: 5em;
+}
+
+a {
+    text-decoration: none;
+} 
+/* Login */
+.login{
+    border: 2px solid rgb(136, 4, 224);
+    border-radius: 7px;
+}
+.user{
+    background-color: rgb(135, 32, 161);
+}
+.enlace{
+    text-decoration: none;
+    cursor: pointer;
+    background-color: rgb(201, 201, 201);
+    border-radius: 4px;
+    margin: auto;
+    padding: .3em;
+}
+
+/* moviespage */
+
+.message_rent_movie{
+    border-radius: 5px;
+}
+.card-movie{
+    cursor: pointer;
+}
+.card-complete {
+    transition: background-color 0.3s ease-in-out; 
+}
+.card-complete:hover {
+    background-color: rgba(0, 0, 0, 0.7); 
+    color: white; 
+}
+/* mifilmoteca */
+.card{
+    position: relative;
+}
+.vista{
+  position: absolute;
+  top: 10px; 
+  left: 50%; 
+  transform: translateX(-50%);
+  z-index: 10; 
+  opacity: 0.7;
+}
