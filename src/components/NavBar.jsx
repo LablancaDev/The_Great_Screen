@@ -31,22 +31,20 @@ const NavBar = () => {
                                 </Link>
                             </li>
                             <Link to={"mifilmoteca"}>
-                                <li className="nav-item filmoteca"><a className="nav-link" href="#">Mi Filmoteca</a></li>
+                                <li className="nav-item filmoteca"><a className="nav-link" href="#">My film library</a></li>
                             </Link>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Menú
+                                    Menu
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li><a className="dropdown-item" href="#">Popular Movies</a></li>
                                     <li><a className="dropdown-item" href="#">Top Rated Movies</a></li>
                                     <li><a className="dropdown-item" href="#">Something else here</a></li>
+                                    <Link to={"/moviespage"}>
+                                    <li><a className="dropdown-item text-danger" href="#">Return</a></li>
+                                    </Link>
                                 </ul>
-                            </li>
-                            <li className="nav-item">
-                                <Link to={"/moviespage"}>
-                                    <a className="nav-link disabled text-danger" aria-disabled="true">Volver</a>
-                                </Link>
                             </li>
                         </ul>
                         <form className="d-flex" role="search">
