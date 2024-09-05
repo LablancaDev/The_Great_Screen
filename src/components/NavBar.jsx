@@ -18,7 +18,7 @@ const NavBar = () => {
         <>
             <nav className="navbar navbar-expand-lg fixed-top">
                 <div className="container-fluid">
-                    <img className='img-fluid logo me-3' src="src/assets/imgs/cine.png" alt="claqueta" />
+                    <img className='img-fluid logo me-3' src="./src/assets/imgs/cine.png" alt="claqueta" />
                     <a className="navbar-brand" href="#">The Great Screen</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
