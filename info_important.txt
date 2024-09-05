@@ -239,4 +239,69 @@ Sí, es correcto. El frontend hace la solicitud a tu servidor, que actúa como i
 
 
 
+### Esquema de la Relación entre Frontend, Servidor y API
 
+```
+┌────────────────┐
+│                │
+│   Frontend     │
+│  (React, Vue,  │
+│   Angular, etc)│
+│                │
+└───────┬────────┘
+        │
+        │ (1) Petición HTTP (GET, POST, PUT, DELETE)
+        ▼
+┌────────────────┐
+│                │
+│   Servidor     │
+│  (Node.js +    │
+│     Express)   │
+│                │
+└───────┬────────┘
+        │
+        │ (2) Interacción con Base de Datos / API
+        │
+        │
+        ▼
+┌────────────────┐        ┌───────────────────────┐
+│                │        │                       │
+│  Base de       │        │      API de terceros  │
+│  Datos         │        │     (TMDB, etc.)      │
+│                │        │                       │
+└────────────────┘        └───────────────────────┘
+```
+
+### Descripción del Esquema
+
+1. **Frontend**:
+   - **Interfaz de Usuario**: Aquí es donde los usuarios interactúan con la aplicación. Utiliza tecnologías como React, Vue, Angular, etc.
+   - **Realiza Peticiones HTTP**: Cuando un usuario realiza una acción (como hacer clic en un botón para alquilar una película), el frontend envía una petición HTTP al servidor.
+
+2. **Servidor** (Node.js + Express):
+   - **Intermediario**: El servidor recibe las peticiones del frontend y actúa como un intermediario. Utiliza Express para definir las rutas y manejar las peticiones.
+   - **Lógica del Servidor**: Aquí se implementa la lógica del negocio, como la autenticación de usuarios, la validación de datos y la gestión de peticiones.
+   - **Interacción con la Base de Datos o API**: El servidor interactúa con la base de datos (por ejemplo, MySQL) o con APIs de terceros (como TMDB) para obtener o almacenar datos.
+
+3. **Base de Datos**:
+   - **Almacenamiento de Datos**: La base de datos almacena datos persistentes que se utilizan en la aplicación, como información de usuarios o películas alquiladas.
+   - **Consultas**: El servidor envía consultas a la base de datos para insertar, actualizar o recuperar datos según sea necesario.
+
+4. **API de Terceros**:
+   - **Recuperación de Datos**: El servidor también puede interactuar con APIs externas para obtener datos que no se almacenan localmente, como información sobre películas.
+   - **Integración**: Esto permite a la aplicación enriquecer la experiencia del usuario con datos adicionales que pueden no estar disponibles en la base de datos local.
+
+### Flujo General de la Aplicación
+
+1. El **usuario** interactúa con el **frontend**, realizando acciones que generan peticiones HTTP.
+2. El **frontend** envía estas peticiones al **servidor** utilizando rutas definidas.
+3. El **servidor** recibe las peticiones y puede:
+   - Consultar o actualizar la **base de datos**.
+   - Hacer peticiones a **APIs de terceros** para obtener información adicional.
+4. El **servidor** procesa la información y devuelve una respuesta al **frontend**.
+5. El **frontend** actualiza la interfaz de usuario en función de la respuesta del servidor, mostrando datos nuevos o confirmando acciones (como un alquiler de película exitoso).
+
+### Conclusión
+
+Este enfoque de usar un servidor como intermediario permite una arquitectura más modular, escalable y segura, donde el frontend no necesita interactuar directamente con la base de datos 
+o las APIs externas, protegiendo así la lógica de negocio y los datos sensibles.

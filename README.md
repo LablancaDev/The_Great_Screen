@@ -1,15 +1,15 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-### Proyecto: Videoclub Online
+### Proyecto: CRUD para un videoclub de películas
 
 Este proyecto es un videoclub online que utiliza diversas tecnologías y técnicas modernas para ofrecer una experiencia de usuario eficiente.
+
+## Ver el Proyecto
+
+Puedes ver el proyecto desplegado en [este enlace](https://the-great-screen.vercel.app/).
+
+## Estado del Proyecto
+
+🚧 **En Proceso de Desarrollo** 🚧  
+Este proyecto está en continuo desarrollo. Aunque tiene varias funcionalidades operativas, aún se están implementando mejoras y nuevas características.
 
 #### **Frontend:**
 - **React**: Utilizado para la creación del frontend y las vistas al usuario, manejando los diferentes estados de la aplicación.
@@ -34,3 +34,4 @@ Este proyecto es un videoclub online que utiliza diversas tecnologías y técnic
 - **Conexión a Múltiples Bases de Datos**: Configurada para manejar datos desde diferentes bases (MySQL y Turso), proporcionando flexibilidad y escalabilidad en la gestión de la información.
 
 Este proyecto combina estas tecnologías y técnicas para ofrecer un videoclub online funcional y optimizado, ofreciendo a los usuarios una experiencia fluida en la búsqueda y gestión de películas.
+
