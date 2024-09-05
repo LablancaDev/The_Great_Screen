@@ -15,9 +15,9 @@ const pool = mysql.createPool({
 });
 
 
-const getDb = () => {
+const data_base_Mysql = () => {
     return pool;
 };
 
 
-module.exports = { getDb };
+module.exports = { data_base_Mysql };

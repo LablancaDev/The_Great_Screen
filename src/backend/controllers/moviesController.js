@@ -1,8 +1,8 @@
 // * CONTROLADOR DE PELÍCULAS
 
 const axios = require('axios');
-const { getDb } = require('../models/mysqlDatabase'); 
-// const { getDb } = require('../models/dataBase');  Importa la conexión a TURSO
+const { data_base_Mysql } = require('../data_base/mysqlDatabase'); 
+const data_base_turso = require('../data_base/TursoDatabase');
 
 const API_KEY = process.env.TMDB_API_KEY; 
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -51,18 +51,18 @@ const getNowPlaying = async (req, res) => {
 
 // * FUNCIONES PARA GESTIONAR LAS PELÍCULAS ALQUILADAS POR EL USUARIO (INSERTAR/MOSTRAR)
 
-// Función para alquilar y solicitar los datos de la película mediante el id pasado en el cuerpo de la solicitud y almacenarla en la base de datos MySQL
+// Función para alquilar y solicitar los datos de la película mediante el id pasado en el cuerpo de la solicitud y almacenarla en ambas bases de datos
 const rentMovie = async (req, res) => {
-
     const movieId = req.body.movieId;
 
     try {
-        const db = await getDb(); 
-
+        // Obtener información de la película
         const response = await axios.get(`${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`);
         const movie = response.data;
 
-        const [result] = await db.execute(
+        // Insertar en la base de datos MySQL
+        const db = await data_base_Mysql(); 
+        await db.execute(
             'INSERT INTO rented_movies (id, title, overview, poster_path) VALUES (?, ?, ?, ?)',
             [
                 movie.id,
@@ -70,6 +70,12 @@ const rentMovie = async (req, res) => {
                 movie.overview,
                 movie.poster_path,
             ]
+        );
+
+        // Insertar en la base de datos Turso
+        await data_base_turso.execute(
+            'INSERT INTO rented_movies (id, title, overview, poster_path, rate, comment, visualization) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [movie.id, movie.title, movie.overview, movie.poster_path, null, null, 0] // Asumiendo valores por defecto
         );
 
         res.json({
@@ -82,45 +88,39 @@ const rentMovie = async (req, res) => {
     }
 };
 
-// Función para recuperar las películas alquiladas de la base de datos 
-
-const getRentedMovies = async (req, res) => { // Petición a la base de datos MYSQL
+// Función para recuperar las películas alquiladas de ambas bases de datos
+const getRentedMovies = async (req, res) => {
     try {
-        const db = await getDb(); 
-  
+        const db = await data_base_Mysql(); 
         const [rows] = await db.execute('SELECT * FROM rented_movies'); 
         res.json(rows); 
-
     } catch (error) {
         console.error('Error al obtener las películas alquiladas:', error);
         res.status(500).json({ message: 'Error al obtener las películas alquiladas' });
     }
-}
+};
 
-// Función para eliminar una película de la base de datos
+// Función para eliminar una película de ambas bases de datos
 const deleteMovie = async (req, res) => {
+    const movieId = req.params.id;
+
     try {
+        const db = await data_base_Mysql(); 
+        await db.execute("DELETE FROM rented_movies WHERE id = ?", [movieId]);
 
-        const db = getDb(); 
+        await data_base_turso.execute("DELETE FROM rented_movies WHERE id = ?", [movieId]);
 
-        const movieId = req.params.id; 
-
-        const response = await db.execute("DELETE FROM rented_movies WHERE id = ?", [movieId])
-
-        res.status(200).json({ message: 'Película eliminada exitosamente' });
-
+        res.status(200).json({ message: 'Película eliminada exitosamente de ambas bases de datos' });
     } catch (error) {
         console.error('Error al eliminar la película:', error);
-        res.status(500).json({ message: 'Error al eliminar la película de la base de datos' });
+        res.status(500).json({ message: 'Error al eliminar la película de las bases de datos' });
     }
-}
+};
 
 // Función para buscar las películas en la base de datos mediante el buscador del Front
 const searchMovies = async (req, res) => {
-   
     const query = req.query.query; 
     try {
-       
         const response = await axios.get(`${BASE_URL}/search/movie`, {
             params: { 
                 api_key: API_KEY, 
@@ -129,22 +129,19 @@ const searchMovies = async (req, res) => {
         });
  
         res.json(response.data);
-
     } catch (error) {
         console.error('Error al buscar la película:', error);
         res.status(500).json({ message: 'Error en la búsqueda de la película en la base de datos' });
     }
 };
 
+// Función para actualizar los datos de la película en ambas bases de datos
 const updateDataMovie = async (req, res) => {   
-
-    const db = await getDb(); 
-
+    const db = await data_base_Mysql(); 
     const { id } = req.params;
     const { rate, comment, visualization } = req.body;
 
     try {
-       
         const query = `
           UPDATE rented_movies 
           SET 
@@ -153,16 +150,16 @@ const updateDataMovie = async (req, res) => {
             visualization = ? 
           WHERE id = ?`;
 
-   
         await db.execute(query, [rate, comment, visualization, id]);
+        
+        // Actualización en Turso
+        await data_base_turso.execute(query, [rate, comment, visualization, id]);
 
-      
-        res.status(200).json({ message: 'Película actualizada con éxito' });
+        res.status(200).json({ message: 'Película actualizada con éxito en ambas bases de datos' });
     } catch (error) {
         console.error('Error al actualizar la película:', error);
-        res.status(500).json({ error: 'Error al actualizar la película' });
-    }
-    
+        res.status(500).json({ error: 'Error al actualizar la película en las bases de datos' });
+    } 
 }
 
 module.exports = {
