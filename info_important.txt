@@ -305,3 +305,6 @@ Sí, es correcto. El frontend hace la solicitud a tu servidor, que actúa como i
 
 Este enfoque de usar un servidor como intermediario permite una arquitectura más modular, escalable y segura, donde el frontend no necesita interactuar directamente con la base de datos 
 o las APIs externas, protegiendo así la lógica de negocio y los datos sensibles.
+
+
+-PENDIENTE: QUE CADA USUARIO ACCEDA A SUS PROPIA LISTA DE PELÍCULAS 

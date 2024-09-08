@@ -12,6 +12,8 @@ const MiFilmoteca = () => {
   // Estado local para almacenar las películas
   const [myMovies, setMyMovies] = useState([]);
 
+  const [message, setMessage] = useState({});
+
   // useEffect para que se carguen todas mis películas alquiladas cuando se cree el componente
   useEffect(() => {
     recoveryMovies();
@@ -90,12 +92,24 @@ const MiFilmoteca = () => {
         payload: { movieId: id, visualization: movieToUpdate.visualization }
       });
 
+      // Actualiza el mensaje SOLO para la película que fue actualizada
+      setMessage(prevMessages => ({
+        ...prevMessages,
+        [id]: 'Película Actualizada Correctamente!'
+      }));
+      setTimeout(() => {
+        setMessage(prevMessages => {
+          const newMessages = { ...prevMessages };
+          delete newMessages[id]; // Elimina el mensaje del estado
+          return newMessages;
+        });
+      }, 2000); // 2 segundos
+
     } catch (error) {
 
       console.error('Error al actualizar la película:', error);
     }
     console.log('Datos enviados: ', movieToUpdate)
-    alert('Has Actualizado la Película Correctamente');
   };
 
 
@@ -110,15 +124,15 @@ const MiFilmoteca = () => {
             <div className='card bg-light bg-opacity-50' style={{ height: '100%' }}>
               <img src={`${TMDB_URL}${movie.poster_path}`} className='card-img-top' alt={movie.title} />
               {movie.visualization ? (
-                <button onClick={() => clickMovieSeen(movie.id, false)} className='vista btn btn-success'>VISTA</button>
+                <button onClick={() => clickMovieSeen(movie.id, false)} className='vista btn btn-success'>Watched</button>
               ) : (
-                <button onClick={() => clickMovieSeen(movie.id, true)} className='vista btn btn-danger'>NO VISTA</button>
+                <button onClick={() => clickMovieSeen(movie.id, true)} className='vista btn btn-warning'>Unwatched</button>
               )}
               <div className='card-body d-flex flex-column'>
                 <h5 className='card-title text-center text-truncate'>{movie.title}</h5>
-                <button onClick={() => removeMovie(movie.id)} className='btn btn-warning'>Eliminar</button>
+                <button onClick={() => removeMovie(movie.id)} className='btn btn-danger'>Delete</button>
                 <div className='d-flex justify-content-center align-items-center my-3'>
-                  <label className='form-label me-2' htmlFor={`valoracion-${movie.id}`}>Valoración: </label>
+                  <label className='form-label me-2' htmlFor={`valoracion-${movie.id}`}>Rating: </label>
                   <input
                     onChange={(e) => handleInputRating(movie.id, e)}
                     className='form-control w-25 bg-success bg-opacity-50 me-2'
@@ -129,7 +143,7 @@ const MiFilmoteca = () => {
                   />
                 </div>
                 <div className='comentarios my-2'>
-                  <label htmlFor={`coment-${movie.id}`}>Comentarios:</label>
+                  <label htmlFor={`coment-${movie.id}`}>Comments:</label>
                   <textarea
                     value={movie.comment || ''}
                     onChange={(e) => handleTextArea(movie.id, e)}
@@ -138,8 +152,10 @@ const MiFilmoteca = () => {
                     rows="3"
                   ></textarea>
                   <div className='d-flex justify-content-center mt-2'>
-                    <button onClick={() => handleSubmit(movie.id)} className='btn btn-success'>Enviar valoración</button>
+                    <button onClick={() => handleSubmit(movie.id)} className='btn btn-success'>Submit Rating</button>
                   </div>
+                  {/* Muestra el mensaje solo si hay un mensaje para esta película */}
+                  {message[movie.id] && <p className='mt-2 text-center text-back'>{message[movie.id]}</p>}
                 </div>
               </div>
             </div>

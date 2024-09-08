@@ -11,6 +11,7 @@ export const Provider = ({ children }) => {
         login: {
             user: "",
             password: "",
+            email: "",
             isLoggedIn: false
         }
     }
@@ -21,7 +22,7 @@ export const Provider = ({ children }) => {
     // * VALORACIÓN PELÍCULAS:
 
     const estadoInicialMovies = {
-        rate_movie: [] 
+        rate_movie: []
     }
     // useReducer que gestiona el estado de valoración, comentarios y visualización de las películas
     const [movies, dispatch2] = useReducer(ReducerMovies, estadoInicialMovies);

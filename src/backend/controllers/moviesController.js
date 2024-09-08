@@ -1,7 +1,8 @@
 // * CONTROLADOR DE PELÍCULAS
 
 const axios = require('axios');
-const { data_base_Mysql } = require('../data_base/mysqlDatabase'); 
+
+const data_base_Mysql = require('../data_base/mysqlDatabase'); 
 const data_base_turso = require('../data_base/TursoDatabase');
 
 const API_KEY = process.env.TMDB_API_KEY; 

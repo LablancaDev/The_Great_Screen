@@ -20,4 +20,4 @@ const data_base_Mysql = () => {
 };
 
 
-module.exports = { data_base_Mysql };
+module.exports = data_base_Mysql;

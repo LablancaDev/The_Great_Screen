@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Context from '../Contexto/Context';
 import types from '../Contexto/types';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
 
@@ -14,9 +15,11 @@ const Login = () => {
     // Extraemos del estadoInicial del reducer el valor del usuario y password para asignarlos al valor de los input 
     const usuario = stateLogin.login.user;
     const password = stateLogin.login.password;
+    const email = stateLogin.login.email;
 
     // useState que almacena si estamos registrados o no, sólo se utiliza para cambiar los botones del formulario de inicio de sesión y registro
     const [isRegistered, setIsRegistered] = useState(false)
+    const [message, setMessage] = useState('')
 
     // Maneja el cambio del nombre de usuario, IMPORTANTE CON EL DISPATCH USO UN OBJETO POR QUE ESTOY MODIFICANDO EL MISMO OBJETO DEL ESTADO INICIAL EN Provider.jsx
     const handleUserNameChange = (e) => {
@@ -32,17 +35,54 @@ const Login = () => {
             payload: e.target.value
         })
     }
-    // Maneja el proceso de registro
-    const handleRegister = () => {
+
+    const handleEmailChange = (e) => {
         dispatch({
-            type: types.registrarse, // Especifica el tipo de acción desde types
+            type: types.cambio_email,
+            payload: e.target.value
         })
     }
+
+    // Maneja el proceso de registro
+    const handleRegister = async () => {
+        const usuarioData = { usuario: usuario, password: password, email: email }; // Renombrado aquí
+        console.log("Datos del registro: ", usuario, password, email)
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/movies/register', usuarioData);
+            dispatch({
+                type: types.registrarse,
+                payload: response.data
+            })
+            alert("Registro exitoso");
+            console.log(response)
+        } catch (error) {
+            console.error('User registration error', error);
+            alert("Hubo un problema con el registro: " + error.response.data.message);
+        }
+    };
+
     // Maneja el proceso de autenticación
-    const handleAuth = () => {
-        dispatch({
-            type: types.logearse // Especifica el tipo de acción desde types
-        })
+    const handleAuth = async () => {
+        const usuarioData = { usuario: usuario, password: password }
+        console.log('Datos del usuario: ', usuarioData)
+        try {
+            const response = await axios.get('http://localhost:5000/api/movies/login', {
+                params: usuarioData // Envía los datos como parámetros de consulta
+            });
+            dispatch({
+                type: types.logearse, // Especifica el tipo de acción desde types
+                payload: response.data
+            })
+            alert("Login exitoso");
+            setMessage('Iniciando Sesión...')
+            setTimeout(() => {
+                setMessage(false)
+            }, 2000);
+        } catch (error) {
+            console.error('User Login error', error);
+            alert("Hubo un problema con el Login: " + error.response.data.message);
+        }
     }
 
     /*Para asegurarte de que estás verificando el valor actualizado de isLoggedIn después de que el estado haya cambiado, 
@@ -57,8 +97,15 @@ const Login = () => {
 
     // Este efecto se ejecuta cada vez que `stateLogin.login.isLoggedIn` cambia
     useEffect(() => {
-        if (stateLogin.login.isLoggedIn) { //Se accede desde el useReducer a isLoggedIn dentro del estadoInicial, cuando isLoggedIn pase a true redirige al user      
-            navigate("/moviespage")
+
+        if (stateLogin.login.isLoggedIn) {
+            setMessage('Iniciando sesión...');
+            const timer = setTimeout(() => {
+                setMessage('');
+                navigate("/moviespage");
+            }, 2000);
+
+            return () => clearTimeout(timer);
         }
 
     }, [stateLogin.login.isLoggedIn])// Dependencia: Solo se ejecuta cuando `isLoggedIn` cambia (Cuando el usuario está logeado entonces se procederá a su redirección)
@@ -68,12 +115,12 @@ const Login = () => {
         <div className='container-fluid'>
             <div className="row min-vh-100 d-flex justify-content-center align-items-center">   {/*min-vh-100 en la fila (row): Esto hace que el contenedor de la fila ocupe al menos el 100% de la altura de la pantalla, permitiendo que el contenido se centre verticalmente.*/}
                 <div className="col-12 col-md-6 col-lg-4">  {/*col-12 col-md-6 col-lg-4 en el contenedor del formulario: Usar estas clases en Bootstrap permite que el formulario tenga un ancho adecuado en diferentes tamaños de pantalla.*/}
-                    <h3 className="text-center">Login</h3>
+                    <h3 className="text-center">{isRegistered ? 'Sign Up' : 'Login In'} Login</h3>
                     <div className='login d-flex flex-column p-4 bg-light bg-opacity-50'>
                         <label
                             htmlFor="usuario"
                             className='form-label text-start w-100'
-                        >Nombre
+                        >Name
                         </label>
                         <input
                             type="text"
@@ -82,11 +129,12 @@ const Login = () => {
                             placeholder='Introduce tu nombre de usuario'
                             onChange={handleUserNameChange} // Llama a la función handleUserNameChange cada vez que cambia el valor del input
                             value={usuario}
+                            required
                         />
                         <label
                             htmlFor="password"
                             className='form-label text-start w-100 mt-3'
-                        >Contraseña
+                        >Password
                         </label>
                         <input
                             type="password"
@@ -95,19 +143,38 @@ const Login = () => {
                             placeholder='Introduce tu contraseña'
                             onChange={handlePasswordChange} // Llama a la función handlePasswordNameChange cada vez que cambia el valor del input
                             value={password}
+                            required
                         />
+                        {isRegistered && (
+                            <>
+                                <label
+                                    htmlFor="email"
+                                    className='form-label text-start w-100 mt-3'
+                                >E-mail
+                                </label>
+                                <input
+                                    type="email"
+                                    id='email'
+                                    className='form-control w-100'
+                                    placeholder='Introduce tu Email'
+                                    onChange={handleEmailChange} // Llama a la función handlePasswordNameChange cada vez que cambia el valor del input
+                                    value={email}
+                                    required
+                                />
+                            </>
+                        )}
                         {
                             isRegistered ? (
-                                <>
-                                    <button onClick={handleRegister} className='btn btn-primary mt-4 w-100'>Registrarse</button>
-                                    <a className='text-center enlace mt-3' onClick={() => setIsRegistered(false)} type='text'>Ya Tengo Cuenta</a>
-                                </>
-
+                                <div className='text-center'>
+                                    <button onClick={handleRegister} className='btn btn-primary my-4 w-100'>Sign Up</button>
+                                    <a className='text-center enlace' onClick={() => setIsRegistered(false)} type='text'>Already have an account</a>
+                                </div>
                             ) : (
-                                <>
-                                    <button onClick={handleAuth} className='btn btn-success mt-4 w-100'>Iniciar sesión</button>
-                                    <a className='text-center enlace mt-3' onClick={() => setIsRegistered(true)} type='text'>Crear Cuenta</a>
-                                </>
+                                <div className='text-center'>
+                                    <button onClick={handleAuth} className='btn btn-success my-4 w-100'>Log In</button>
+                                    <a className='enlace' onClick={() => setIsRegistered(true)} type='text'>Create Account</a>
+                                    <p className='text-success mt-4'>{message}</p>
+                                </div>
                             )
 
 

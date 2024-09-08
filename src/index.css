@@ -41,7 +41,8 @@ a {
 /* moviespage */
 
 .message_rent_movie{
-    border-radius: 5px;
+    background-color: rgb(136, 45, 255);
+    color: rgb(178, 255, 159);
 }
 .card-movie{
     cursor: pointer;

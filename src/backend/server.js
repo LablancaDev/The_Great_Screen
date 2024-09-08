@@ -8,7 +8,7 @@ const cors = require('cors');
 
 const app = express();
 
-const moviesRoutes = require('./routes/moviesRoutes');
+const moviesRoutes = require('./routes/moviesRoutes');          
 
 app.use(cors());
 

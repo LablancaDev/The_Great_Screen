@@ -1,3 +1,5 @@
+// * DATA BASE TURSO
+
 const { createClient } = require('@libsql/client');
 
 const client = createClient({

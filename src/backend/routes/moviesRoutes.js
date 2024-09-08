@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router();
 
 const moviesController = require('../controllers/moviesController');
+const loginController = require('../controllers/loginController');
 
 // * Rutas para mostrar las películas de diferentes categorías 
 
@@ -30,4 +31,12 @@ router.get('/search', moviesController.searchMovies)
 // * Rutas para actualizar los datos de valoración, comentarios y visualización de las películas
 router.put('/update/:id', moviesController.updateDataMovie)
 
-module.exports = router;
+// * Rutas par el registro de usuarios
+
+router.post('/register', loginController.registerNewUser)
+
+// * Rutas par el login de usuarios
+
+router.get('/login', loginController.loginUser)
+
+module.exports = router;                        
