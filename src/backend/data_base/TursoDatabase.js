@@ -1,6 +1,7 @@
 // * DATA BASE TURSO
 
 const { createClient } = require('@libsql/client');
+require('dotenv').config(); //NUEVO
 
 const client = createClient({
     url: 'libsql://thegreatscreen-lablancadev.turso.io',

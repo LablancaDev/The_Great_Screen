@@ -23,12 +23,28 @@ const MiFilmoteca = () => {
   const recoveryMovies = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/movies/rented');
-      setMyMovies(response.data);
-      console.log(myMovies)
+      // Verificar que rows es un array y asignar solo esa parte a myMovies
+      if (Array.isArray(response.data.rows)) {
+        // se utiliza map() para transformar cada elemento de response.data.rows en un nuevo objeto que contendrá la información de cada película.
+        // después se almacena el nuevo array de objetos creado con map en el estado local myMovies dentro del componente (cada objeto representa una película)
+        setMyMovies(response.data.rows.map(row => ({
+          id: row[0],
+          title: row[1],
+          overview: row[2],
+          poster_path: row[3],
+          rate: row[4],
+          comment: row[5],
+          visualization: row[6]
+        })));
+      } else {
+        console.error('La respuesta de la API no contiene un array en rows:', response.data);
+        setMyMovies([]); // Reiniciar myMovies si no hay un array en rows
+      }
     } catch (error) {
-      console.error('Error al obtener la película:', error);
+      console.error('Error al obtener las películas:', error);
     }
   };
+  
 
   // Función para eliminar una película
   const removeMovie = async (id) => {
