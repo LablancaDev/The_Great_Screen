@@ -3,8 +3,8 @@
 const { createClient } = require('@libsql/client');
 
 const client = createClient({
-    url: 'libsql://thegreatscreen-lablancadev.turso.io',
-    authToken: process.env.TURSO_API_KEY
+    url: "libsql://thegreatscreen-lablancadev.turso.io",
+    authToken:"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MjYzMjg3MjksImlkIjoiOWRmOTU1M2QtYTI4MC00ZmNlLWI3OTMtYzU3NDkyNDE4OTY2In0.UXuSuwcZTdEhYOBUsh5zhzVH-eaQf1YHtM1ZbYUqrYz0kqud2BPWyDjrAsLqmT_tGVn5G6w-r4Pe93dPXNsbBQ"
 });
 
 async function createTables() {
